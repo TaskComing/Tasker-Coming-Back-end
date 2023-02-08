@@ -11,10 +11,10 @@ const schema = new mongoose.Schema({
     required: true,
   },
   description: {
-    default: '(ˊᗜˋ*) successful',
+    default: 'successful',
     type: String,
   },
-  soldOut: {
+  deleted: {
     default: false,
     type: Boolean,
   },

@@ -1,6 +1,7 @@
 const express = require('express');
 const productRouter = require('./product');
 const authRouter = require('./auth');
+const auth = require('../middleware/authentication');
 
 const v1Router = express.Router();
 
