@@ -8,7 +8,6 @@ async function getNotificationList(req, res) {
 
 async function getNotificationById(req, res) {
   const { id } = req.params;
-  console.log(id)
   const notification = await Notification.findById(id).populate("templateId").exec();
   if (!notification) {
     return res.status(404).json({ error: 'notification not found' });
@@ -18,7 +17,6 @@ async function getNotificationById(req, res) {
 
 async function addNotification(req, res) {
   const { id, isUnRead, templateId } = req.body;
-  console.log(isUnRead, templateId)
   const existingNotification = await Notification.findById(id).exec();
   if (existingNotification) {
     return res.sendStatus(409); // The request could not be processed because of conflict in the request,
