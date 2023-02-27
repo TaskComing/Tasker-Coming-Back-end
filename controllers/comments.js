@@ -1,8 +1,8 @@
 const CommentModel = require('../models/comment');
 
 const addComment = async (req, res) => {
-  const { text, reply, createDatetime } = req.body;
-  const comment = new CommentModel({ text, reply, createDatetime });
+  const { text, createDatetime } = req.body;
+  const comment = new CommentModel({ text, createDatetime });
   await comment.save();
   res.status(201).json(comment);
 };
@@ -24,10 +24,10 @@ const getCommentById = async (req, res) => {
 
 const updateCommentById = async (req, res) => {
   const { id } = req.params;
-  const { text, reply, createDatetime } = req.body;
+  const { text, createDatetime } = req.body;
   const comment = await CommentModel.findByIdAndUpdate(
     id,
-    { text, reply, createDatetime },
+    { text, createDatetime },
     { new: true }
   ).exec();
   if (!comment) {
@@ -47,10 +47,26 @@ const deleteCommentById = async (req, res) => {
   res.sendStatus(204);
 };
 
+const addReplyToComment = async (req, res) => {
+  const { text, createDatetime } = req.body;
+  // const parentCommentId = req.params.id;
+  const parentCommentId = req.query.id;
+  const reply = new CommentModel({ text, parentCommentId, createDatetime });
+  await reply.save();
+  const repliedCommentId = reply._id;
+  await CommentModel.findByIdAndUpdate(
+    parentCommentId,
+    { $addToSet: { repliedCommentIds: repliedCommentId } },
+    { new: true }
+  ).exec();
+  res.status(201).json(reply);
+};
+
 module.exports = {
   addComment,
   getAllComments,
   getCommentById,
   updateCommentById,
   deleteCommentById,
+  addReplyToComment,
 };
