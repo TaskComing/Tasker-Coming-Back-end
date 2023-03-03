@@ -1,25 +1,77 @@
-const { StatusCodes } = require('http-status-codes');
-const User = require('../models/User');
-const { BadRequestError, UnauthenticatedError } = require('../errors');
+const asyncHandler = require('express-async-handler');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const UserModel = require('../models/User');
+const { BadRequestError } = require('../errors');
+// @desc Register a user
+// @route POST /v1/auth/register
+// @access public
+const registerUser = asyncHandler(async (req, res) => {
+  const { username, email, password } = req.body;
 
-const register = async (req, res) => {
-  const user = await User.create({ ...req.body });
-  const token = user.createJWT();
-  res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
-};
+  if (!username || !email || !password) {
+    res.status(400);
+    throw new Error('All fields are mandatory!');
+  }
+  const userAvailable = await UserModel.findOne({ email });
+  if (userAvailable) {
+    res.status(400);
+    throw new Error('User already registered!');
+  }
+  // // Hash password
+  const hashedPassword = await bcrypt.hash(password, 12);
+  const user = new UserModel({
+    username,
+    email,
+    password: hashedPassword,
+  });
 
-const login = async (req, res) => {
+  if (user) {
+    res.status(201).json({ _id: user.id, email: user.email });
+  } else {
+    res.status(400);
+    throw new Error('User data us not valid');
+  }
+  // // await user.hashPassword();
+  // await user.save();
+  res.json({ message: 'Register the user' });
+});
+
+// @desc Login user
+// @route POST /v1/auth/login
+// @access public
+const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) throw new BadRequestError('Please provide email and password');
+  if (!email || !password) {
+    res.status(400);
+    throw new BadRequestError('Please provide email and password');
+  }
+  const user = await UserModel.findOne({ email });
+  // compare password with hashedpassword
+  if (user && (await bcrypt.compare(password, user.password))) {
+    const accessToken = jwt.sign(
+      {
+        user: {
+          username: user.username,
+          email: user.email,
+          id: user.id,
+        },
+      },
+      process.env.ACCESS_TOKEN_SECERT,
+      { expiresIn: '15m' }
+    );
+    res.status(200).json({ accessToken });
+  } else {
+    res.status(401);
+    throw new Error('email or password is not valid');
+  }
+});
 
-  const user = await User.findOne({ email });
-  if (!user) throw new UnauthenticatedError('Invalid Credentials');
+// @desc Current user info
+// @route POST /v1/auth/current
+// @access private
+const currentUser = asyncHandler(async (req, res) => {
+  res.json(req.user);
+});
 
-  const isPasswordCorrect = await user.comparePassword(password);
-  if (!isPasswordCorrect) throw new UnauthenticatedError('Invalid Credentials');
-
-  const token = user.createJWT();
-  res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
-};
-
-module.exports = { register, login };
+module.exports = { registerUser, loginUser, currentUser };
