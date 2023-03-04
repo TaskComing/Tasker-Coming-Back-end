@@ -1,77 +1,84 @@
-const asyncHandler = require('express-async-handler');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const UserModel = require('../models/User');
-const { BadRequestError } = require('../errors');
-// @desc Register a user
-// @route POST /v1/auth/register
-// @access public
-const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+const bcrypt = require('bcryptjs');
+const asyncHandler = require('express-async-handler');
+const User = require('../models/User');
+const { BadRequestError, UnauthenticatedError } = require('../errors');
+// Generate JWT
+const generateToken = (id) =>
+  jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
 
-  if (!username || !email || !password) {
+// @desc    Register new user
+// @route   POST /api/users
+// @access  Public
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
     res.status(400);
-    throw new Error('All fields are mandatory!');
+    throw new BadRequestError('Please add all fields');
   }
-  const userAvailable = await UserModel.findOne({ email });
-  if (userAvailable) {
+
+  // Check if user exists
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
     res.status(400);
-    throw new Error('User already registered!');
+    throw new UnauthenticatedError('User already exists');
   }
-  // // Hash password
-  const hashedPassword = await bcrypt.hash(password, 12);
-  const user = new UserModel({
-    username,
+
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Create user
+  const user = await User.create({
+    name,
     email,
     password: hashedPassword,
   });
 
   if (user) {
-    res.status(201).json({ _id: user.id, email: user.email });
+    res.status(201).json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
+    });
   } else {
     res.status(400);
-    throw new Error('User data us not valid');
+    throw new UnauthenticatedError('Invalid user data');
   }
-  // // await user.hashPassword();
-  // await user.save();
-  res.json({ message: 'Register the user' });
 });
 
-// @desc Login user
-// @route POST /v1/auth/login
-// @access public
+// @desc    Authenticate a user
+// @route   POST /api/users/login
+// @access  Public
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    res.status(400);
-    throw new BadRequestError('Please provide email and password');
-  }
-  const user = await UserModel.findOne({ email });
-  // compare password with hashedpassword
+
+  // Check for user email
+  const user = await User.findOne({ email });
+
   if (user && (await bcrypt.compare(password, user.password))) {
-    const accessToken = jwt.sign(
-      {
-        user: {
-          username: user.username,
-          email: user.email,
-          id: user.id,
-        },
-      },
-      process.env.ACCESS_TOKEN_SECERT,
-      { expiresIn: '15m' }
-    );
-    res.status(200).json({ accessToken });
+    res.json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
+    });
   } else {
-    res.status(401);
-    throw new Error('email or password is not valid');
+    res.status(400);
+    throw new UnauthenticatedError('Invalid credentials');
   }
 });
+const forgotPassword = asyncHandler(async (req, res) => {});
+const resetPassword = asyncHandler(async (req, res) => {});
 
-// @desc Current user info
-// @route POST /v1/auth/current
-// @access private
-const currentUser = asyncHandler(async (req, res) => {
-  res.json(req.user);
-});
-
-module.exports = { registerUser, loginUser, currentUser };
+module.exports = {
+  registerUser,
+  loginUser,
+  forgotPassword,
+  resetPassword,
+};
