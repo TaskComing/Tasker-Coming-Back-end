@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const UserSchema = new mongoose.Schema({
-  name: {
+const userSchema = new Schema({
+  userName: {
     type: String,
     required: [true, 'Please provide name'],
     minlength: 3,
@@ -23,22 +23,54 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please provide password'],
     minlength: 6,
   },
+  salt: {
+    type: String,
+    required: true,
+  },
+  mobile: {
+    type: String,
+    lenghth: 11,
+  },
+  opendId: {
+    type: String,
+  },
+  head_img_url: {
+    type: String,
+  },
+  following_task_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'task',
+    },
+  ],
+  notification: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'notification',
+    },
+  ],
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-UserSchema.pre('save', async function () {
+userSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-UserSchema.methods.createJWT = function () {
+userSchema.methods.createJWT = function () {
   return jwt.sign({ userId: this._id, name: this.name }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
 };
 
-UserSchema.methods.comparePassword = async function (password) {
+userSchema.methods.comparePassword = async function (password) {
   const isMatch = await bcrypt.compare(password, this.password);
   return isMatch;
 };
 
-module.exports = mongoose.model('User', UserSchema);
+UserModel = model('User', userSchema);
+
+module.exports = UserModel;
