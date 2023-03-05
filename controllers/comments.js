@@ -1,8 +1,8 @@
 const CommentModel = require('../models/comment');
 
 const addComment = async (req, res) => {
-  const { text, createDatetime } = req.body;
-  const comment = new CommentModel({ text, createDatetime });
+  const { text, create_datetime } = req.body;
+  const comment = new CommentModel({ text, create_datetime });
   await comment.save();
   res.status(201).json(comment);
 };
@@ -24,10 +24,10 @@ const getCommentById = async (req, res) => {
 
 const updateCommentById = async (req, res) => {
   const { id } = req.params;
-  const { text, createDatetime } = req.body;
+  const { text, create_datetime } = req.body;
   const comment = await CommentModel.findByIdAndUpdate(
     id,
-    { text, createDatetime },
+    { text, create_datetime },
     { new: true }
   ).exec();
   if (!comment) {
@@ -48,15 +48,15 @@ const deleteCommentById = async (req, res) => {
 };
 
 const addReplyToComment = async (req, res) => {
-  const { text, createDatetime } = req.body;
+  const { text, create_datetime } = req.body;
   // const parentCommentId = req.params.id;
-  const parentCommentId = req.query.id;
-  const reply = new CommentModel({ text, parentCommentId, createDatetime });
+  const parent_comment_id = req.query.id;
+  const reply = new CommentModel({ text, parent_comment_id, create_datetime });
   await reply.save();
-  const repliedCommentId = reply._id;
+  const replied_comment_id = reply._id;
   await CommentModel.findByIdAndUpdate(
-    parentCommentId,
-    { $addToSet: { repliedCommentIds: repliedCommentId } },
+    parent_comment_id,
+    { $addToSet: { replied_comment_ids: replied_comment_id } },
     { new: true }
   ).exec();
   res.status(201).json(reply);

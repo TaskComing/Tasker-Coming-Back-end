@@ -1,4 +1,4 @@
-// const Joi = require('joi');
+const Joi = require('joi');
 const { Schema, model } = require('mongoose');
 
 const commentSchema = new Schema({
@@ -6,22 +6,22 @@ const commentSchema = new Schema({
     type: String,
     required: true,
   },
-  repliedCommentIds: [
+  replied_comment_ids: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Comment',
     },
   ],
-  parentCommentId: {
+  parent_comment_id: {
     type: Schema.Types.ObjectId,
     ref: 'Comment',
     // default: '',
   },
-  createUserId: {
+  create_user_id: {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  createDatetime: {
+  create_datetime: {
     type: Date,
     required: true,
     default: new Date().getTime(),

@@ -4,7 +4,7 @@ const productRouter = require('./product');
 const taskRouter = require('./task');
 const commentRouter = require('./comments');
 const notificationRouter = require('./notifications');
-// const auth = require('../middleware/authentication');
+const auth = require('../middleware/authentication');
 
 const v1Router = express.Router();
 
