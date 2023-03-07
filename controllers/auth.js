@@ -1,77 +1,49 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const { BadRequestError, UnauthenticatedError } = require('../errors');
-// Generate JWT
-const generateToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
 
 // @desc    Register new user
-// @route   POST /api/users
+// @route   POST /v1/auth/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
-
-  if (!name || !email || !password) {
+  try {
+    const { name, email, password } = req.body;
+    const user = new User({ name, email, password });
+    await user.save();
+    const token = user.createJWT();
+    res.status(201).json({ user: { name: user.name, email: user.email }, token });
+  } catch (error) {
     res.status(400);
     throw new BadRequestError('Please add all fields');
-  }
-
-  // Check if user exists
-  const userExists = await User.findOne({ email });
-
-  if (userExists) {
-    res.status(400);
-    throw new UnauthenticatedError('User already exists');
-  }
-
-  // Hash password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  // Create user
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-  });
-
-  if (user) {
-    res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(400);
-    throw new UnauthenticatedError('Invalid user data');
   }
 });
 
 // @desc    Authenticate a user
-// @route   POST /api/users/login
+// @route   POST /v1/auth/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400);
+    throw new BadRequestError('Please add all fields');
+  }
+  const user = await User.findOne({ email }).select('+password');
 
-  // Check for user email
-  const user = await User.findOne({ email });
-
-  if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
-    });
-  } else {
+  if (!user) {
     res.status(400);
     throw new UnauthenticatedError('Invalid credentials');
   }
+
+  const isCorrect = await user.comparePassword(password);
+
+  if (!isCorrect) {
+    res.status(400);
+    throw new UnauthenticatedError('Invalid credentials');
+  }
+
+  const token = user.createJWT();
+  user.password = undefined;
+  res.status(201).json({ user, token });
 });
 const forgotPassword = asyncHandler(async (req, res) => {});
 const resetPassword = asyncHandler(async (req, res) => {});
