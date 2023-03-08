@@ -5,7 +5,7 @@ const cors = require('cors');
 const xss = require('xss-clean');
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
-const connectDB = require('./db/connect');
+const { connectDB } = require('./db/connect');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const swaggerJsDoc = require('./utils/swagger');
@@ -19,7 +19,6 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 app.use(xss());
-
 // routes
 app.use('/v1', v1Router);
 
