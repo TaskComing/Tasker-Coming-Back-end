@@ -1,11 +1,11 @@
+const express = require('express');
 const {
   addTask,
   getAllTasks,
   getTaskById,
   updateTaskById,
   deleteTaskById,
-} = require('../controller/taskController');
-const express = require('express');
+} = require('../controllers/task');
 
 const taskRouter = express.Router();
 
