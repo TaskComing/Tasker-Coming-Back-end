@@ -1,52 +1,115 @@
-const Task = require('../models/task');
-
-async function getTaskList(req, res) {
-  const tasks = await Task.find().exec();
-  return res.json(tasks);
-}
-
-async function getTaskByCode(req, res) {
-  const { _id } = req.params;
-  const task = await Task.findById(_id).exec();
+//code start
+const taskModel = require('../models/Task');
+const getAllTasks = async (req, res) => {
+  const tasks = await taskModel.find().exec();
+  res.json(tasks);
+};
+const getTaskById = async (req, res, next) => {
+  const { id } = req.params;
+  task = await taskModel.findById(id).exec();
   if (!task) {
-    return res.status(404).json({ error: 'task not found' });
+    res.status(404).json({ error: 'task not found ' });
+    return;
   }
-  return res.json(task);
-}
+  res.json(task);
+};
 
-async function addTask(req, res) {
-  const { _id, title, state, deleted } = req.body;
-  const existingTask = await Task.findById(_id).exec();
-  if (existingTask) {
-    return res.sendStatus(409); // The request could not be processed because of conflict in the request,
-  }
+const addTask = async (req, res) => {
+  console.log(req);
+  const {
+    due_time,
+    remote,
+    x,
+    y,
+    detail,
+    images,
+    budget,
+    type,
+    tag,
+    status,
+    comments,
+    offers,
+    deleted,
+  } = req.body;
 
-  const task = new Task({
-    _id,
-    title,
-    state,
+  const task = new taskModel({
+    due_time,
+    remote,
+    x,
+    y,
+    detail,
+    images,
+    budget,
+    type,
+    tag,
+    status,
+    comments,
+    offers,
     deleted,
   });
-
   await task.save();
-  return res.status(201).json(task);
-}
+  res.status(201).json(task);
+};
 
-async function updateTaskByCode(req, res) {
-  const { _id } = req.params;
-  const { title, state, deleted } = req.body;
-  const task = await Task.findByIdAndUpdate(_id, { title, state, deleted }).exec();
-
+const updateTaskById = async (req, res, next) => {
+  const { id } = req.params;
+  const {
+    due_time,
+    remote,
+    x,
+    y,
+    detail,
+    images,
+    budget,
+    type,
+    tag,
+    status,
+    comments,
+    offers,
+    deleted,
+  } = req.body;
+  const task = await taskModel
+    .findByIdAndUpdate(
+      id,
+      {
+        due_time,
+        remote,
+        x,
+        y,
+        detail,
+        images,
+        budget,
+        type,
+        tag,
+        status,
+        comments,
+        offers,
+        deleted,
+      },
+      { new: true }
+    ) //把更新后的数据返回回来
+    .exec();
   if (!task) {
-    return res.sendStatus(404);
+    res.status(404).json({ error: 'task not found ' });
+    return;
   }
+  res.json(task);
+};
 
-  return res.json(task);
-}
+const deleteTaskById = async (req, res, next) => {
+  const { id } = req.params;
+  const task = await taskModel.findByIdAndDelete(id).exec();
+  if (!task) {
+    res.status(404).json({ error: 'task not found ' });
+    return;
+  }
+  res.sendStatus(204); //不需要加内容，它也不返回内容
+};
 
 module.exports = {
-  getTaskList,
-  getTaskByCode,
+  getAllTasks,
+  getTaskById,
   addTask,
-  updateTaskByCode,
+  updateTaskById,
+  deleteTaskById,
 };
