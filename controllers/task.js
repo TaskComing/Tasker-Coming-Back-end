@@ -1,12 +1,12 @@
 //code start
-const taskModel = require('../model/taskModel');
+const taskModel = require('../models/Task');
 const getAllTasks = async (req, res) => {
   const tasks = await taskModel.find().exec();
   res.json(tasks);
 };
 const getTaskById = async (req, res, next) => {
   const { id } = req.params;
-  task = await taskModel.findById(id).exec();
+  const task = await taskModel.findById(id).exec();
   if (!task) {
     res.status(404).json({ error: 'task not found ' });
     return;
