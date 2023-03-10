@@ -1,3 +1,4 @@
+const express = require('express');
 const {
   addTask,
   getAllTasks,
@@ -5,7 +6,6 @@ const {
   updateTaskById,
   deleteTaskById,
 } = require('../controllers/task');
-const express = require('express');
 
 const taskRouter = express.Router();
 

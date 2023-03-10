@@ -6,7 +6,7 @@ const getAllTasks = async (req, res) => {
 };
 const getTaskById = async (req, res, next) => {
   const { id } = req.params;
-  task = await taskModel.findById(id).exec();
+  const task = await taskModel.findById(id).exec();
   if (!task) {
     res.status(404).json({ error: 'task not found ' });
     return;
