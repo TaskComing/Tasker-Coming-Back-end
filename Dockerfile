@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 8080
 
 # Set the entrypoint for the container/ yarn start can be used later
-ENTRYPOINT [ "yarn", "dev" ]
+ENTRYPOINT [ "yarn", "start" ]
