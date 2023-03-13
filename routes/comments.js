@@ -1,6 +1,6 @@
+const { Router } = require('express');
 const auth = require('../middleware/authentication');
 
-const { Router } = require('express');
 const {
   addComment,
   getAllComments,

@@ -1,5 +1,6 @@
-//code start
+// code start
 const taskModel = require('../models/Task');
+
 const getAllTasks = async (req, res) => {
   const tasks = await taskModel.find().exec();
   res.json(tasks);
@@ -87,7 +88,7 @@ const updateTaskById = async (req, res, next) => {
         deleted,
       },
       { new: true }
-    ) //把更新后的数据返回回来
+    ) // 把更新后的数据返回回来
     .exec();
   if (!task) {
     res.status(404).json({ error: 'task not found ' });
@@ -103,7 +104,7 @@ const deleteTaskById = async (req, res, next) => {
     res.status(404).json({ error: 'task not found ' });
     return;
   }
-  res.sendStatus(204); //不需要加内容，它也不返回内容
+  res.sendStatus(204); // 不需要加内容，它也不返回内容
 };
 
 module.exports = {
