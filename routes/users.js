@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const {
-  addUser,
+  // addUser,
   getAllUsers,
   getUserById,
   updateUserById,
@@ -15,7 +15,7 @@ const {
 
 const userRouter = Router();
 
-userRouter.post('', addUser);
+// userRouter.post('', addUser);
 userRouter.get('', getAllUsers);
 userRouter.get('/:id', getUserById);
 userRouter.put('/:id', updateUserById);

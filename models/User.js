@@ -36,6 +36,49 @@ const userSchema = new Schema({
   //     message: "Passwords don't match",
   //   },
   // },
+  salt: {
+    type: String,
+  },
+  firstName: {
+    type: String,
+    default: 'Please enter your first name',
+  },
+  lastName: {
+    type: String,
+    default: 'Please enter your last name',
+  },
+  mobile: {
+    type: String,
+    length: 11,
+  },
+  openid: {
+    type: String,
+  },
+  head_img_url: {
+    type: String,
+  },
+  following_task_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'task',
+    },
+  ],
+  notification_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'notification',
+    },
+  ],
+  // notification: [
+  //   {
+  //     type: String,
+  //     ref: 'notification',
+  //   },
+  // ],
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.pre('save', async function () {

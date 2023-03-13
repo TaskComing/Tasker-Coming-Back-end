@@ -14,6 +14,6 @@ v1Router.use('/products', productRouter);
 v1Router.use('/tasks', taskRouter);
 v1Router.use('/notifications', notificationRouter);
 v1Router.use('/comments', commentRouter);
-v1Router.use('/users', userRouter);
+v1Router.use('/users', auth, userRouter);
 
 module.exports = v1Router;

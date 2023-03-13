@@ -1,3 +1,5 @@
+const auth = require('../middleware/authentication');
+
 const { Router } = require('express');
 const {
   addComment,
@@ -10,12 +12,12 @@ const {
 
 const commentRouter = Router();
 
-commentRouter.post('', addComment);
+commentRouter.post('', auth, addComment);
 commentRouter.get('', getAllComments);
-commentRouter.get('/:id', getCommentById);
-commentRouter.put('/:id', updateCommentById);
-commentRouter.delete('/:id', deleteCommentById);
+commentRouter.get('/:id', auth, getCommentById);
+commentRouter.put('/:id', auth, updateCommentById);
+commentRouter.delete('/:id', auth, deleteCommentById);
 // commentRouter.post('/:id', addReplyToComment);
-commentRouter.post('/query', addReplyToComment);
+commentRouter.post('/query', auth, addReplyToComment);
 
 module.exports = commentRouter;
