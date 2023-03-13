@@ -97,6 +97,6 @@ userSchema.methods.comparePassword = async function (password) {
   return isMatch;
 };
 
-UserModel = model('User', userSchema);
+const UserModel = model('User', userSchema);
 
 module.exports = UserModel;
