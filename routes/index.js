@@ -9,10 +9,11 @@ const auth = require('../middleware/authentication');
 
 const v1Router = express.Router();
 
-v1Router.use('/auth', authRouter);
+v1Router.use('/auth', auth, authRouter);
 v1Router.use('/products', productRouter);
+
 v1Router.use('/tasks', taskRouter);
-v1Router.use('/notifications', notificationRouter);
+v1Router.use('/notifications', auth, notificationRouter);
 v1Router.use('/comments', commentRouter);
 v1Router.use('/users', auth, userRouter);
 

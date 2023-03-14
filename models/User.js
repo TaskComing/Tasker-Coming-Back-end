@@ -4,11 +4,17 @@ const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
 const userSchema = new Schema({
-  userName: {
+  firstName: {
     type: String,
-    required: [true, 'Please provide name'],
-    minlength: 3,
-    maxlength: 50,
+    required: [true, 'Please provide firstName'],
+    minlength: 1,
+    maxlength: 20,
+  },
+  lastName: {
+    type: String,
+    required: [true, 'Please provide lastName'],
+    minlength: 1,
+    maxlength: 20,
   },
   email: {
     type: String,
@@ -36,17 +42,6 @@ const userSchema = new Schema({
   //     message: "Passwords don't match",
   //   },
   // },
-  salt: {
-    type: String,
-  },
-  firstName: {
-    type: String,
-    default: 'Please enter your first name',
-  },
-  lastName: {
-    type: String,
-    default: 'Please enter your last name',
-  },
   mobile: {
     type: String,
     length: 11,
@@ -79,6 +74,7 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  // profilePicture: { type: String, required: false },
 });
 
 userSchema.pre('save', async function () {
