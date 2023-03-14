@@ -17,7 +17,6 @@ async function getNotificationById(req, res) {
 }
 
 async function addNotification(req, res) {
-
   const { id, read, text, click_url, notification_type } = req.body;
 
   const existingNotification = await Notification.findById(id).exec();
@@ -26,7 +25,6 @@ async function addNotification(req, res) {
   }
 
   const notification = new Notification({ read, text, click_url, notification_type });
-
 
   await notification.save();
   return res.status(201).json(notification);
