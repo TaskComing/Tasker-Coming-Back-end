@@ -4,11 +4,20 @@ const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
 const UserSchema = new mongoose.Schema({
-  name: {
+  // id: {
+  //   type: String,
+  // },
+  firstName: {
     type: String,
-    required: [true, 'Please provide name'],
-    minlength: 3,
-    maxlength: 50,
+    required: [true, 'Please provide firstName'],
+    minlength: 1,
+    maxlength: 20,
+  },
+  lastName: {
+    type: String,
+    required: [true, 'Please provide lastName'],
+    minlength: 1,
+    maxlength: 20,
   },
   email: {
     type: String,
@@ -36,6 +45,7 @@ const UserSchema = new mongoose.Schema({
   //     message: "Passwords don't match",
   //   },
   // },
+  // profilePicture: { type: String, required: false },
 });
 
 UserSchema.pre('save', async function () {
