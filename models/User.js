@@ -4,9 +4,6 @@ const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
 const UserSchema = new mongoose.Schema({
-  // id: {
-  //   type: String,
-  // },
   firstName: {
     type: String,
     required: [true, 'Please provide firstName'],
