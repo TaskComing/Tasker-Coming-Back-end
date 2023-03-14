@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
 const UserSchema = new mongoose.Schema({
-  id: {
-    type: String,
-  },
+  // id: {
+  //   type: String,
+  // },
   firstName: {
     type: String,
     required: [true, 'Please provide firstName'],
@@ -34,17 +34,18 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     maxlength: 25,
   },
-  confirmPassword: {
-    type: String,
-    required: [true, 'Please confirm your password!'],
-    // this runs only save() or create()
-    validate: {
-      validator(el) {
-        return el === this.password;
-      },
-      message: "Passwords don't match",
-    },
-  },
+  // confirmPassword: {
+  //   type: String,
+  //   required: [true, 'Please confirm your password!'],
+  //   // this runs only save() or create()
+  //   validate: {
+  //     validator(el) {
+  //       return el === this.password;
+  //     },
+  //     message: "Passwords don't match",
+  //   },
+  // },
+  // profilePicture: { type: String, required: false },
 });
 
 UserSchema.pre('save', async function () {
@@ -53,13 +54,9 @@ UserSchema.pre('save', async function () {
 });
 
 UserSchema.methods.createJWT = function () {
-  return jwt.sign(
-    { userId: this._id, firstName: this.firstName, lastName: this.lastName },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: process.env.JWT_LIFETIME,
-    }
-  );
+  return jwt.sign({ userId: this._id, name: this.name }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_LIFETIME,
+  });
 };
 
 UserSchema.methods.comparePassword = async function (password) {
