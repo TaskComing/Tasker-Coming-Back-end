@@ -1,4 +1,4 @@
-name: Test Build
+name: Test Lint
 on:
   push:
     branches:
@@ -16,5 +16,5 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-      - name: Test lint
+      - name: Test Lint
         run: yarn && CI='' yarn pre-commit
