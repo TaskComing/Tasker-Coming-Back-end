@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new Schema({
   firstName: {
     type: String,
     required: [true, 'Please provide firstName'],
@@ -42,23 +42,69 @@ const UserSchema = new mongoose.Schema({
   //     message: "Passwords don't match",
   //   },
   // },
+  mobile: {
+    type: String,
+    length: 11,
+  },
+  openid: {
+    type: String,
+  },
+  head_img_url: {
+    type: String,
+  },
+  following_task_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Task',
+    },
+  ],
+  notification_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Notification',
+    },
+  ],
+  // notification: [
+  //   {
+  //     type: String,
+  //     ref: 'Notification',
+  //   },
+  // ],
+  comments_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
+  offers_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Offer',
+    },
+  ],
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
   // profilePicture: { type: String, required: false },
 });
 
-UserSchema.pre('save', async function () {
+userSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-UserSchema.methods.createJWT = function () {
+userSchema.methods.createJWT = function () {
   return jwt.sign({ userId: this._id, name: this.name }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
 };
 
-UserSchema.methods.comparePassword = async function (password) {
+userSchema.methods.comparePassword = async function (password) {
   const isMatch = await bcrypt.compare(password, this.password);
   return isMatch;
 };
 
-module.exports = mongoose.model('User', UserSchema);
+const UserModel = model('User', userSchema);
+
+module.exports = UserModel;
