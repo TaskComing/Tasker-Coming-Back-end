@@ -1,4 +1,6 @@
 const UserModel = require('../models/User');
+// const CommentModel = require('../models/comment');
+// const { populate } = require('../models/comment');
 
 // const addUser = async (req, res) => {
 //   const { firstName, lastName, email, password } = req.body;
@@ -14,7 +16,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   const { id } = req.params;
-  const user = await UserModel.findById(id).exec();
+  const user = await UserModel.findById(id).populate('comments_id').exec();
   if (!user) {
     res.status(404).json({ error: 'user not found' });
     return;
@@ -24,10 +26,10 @@ const getUserById = async (req, res) => {
 
 const updateUserById = async (req, res) => {
   const { id } = req.params;
-  const { firstName, lastName, mobile, email, password } = req.body;
+  const { firstName, lastName, mobile, email, password, head_img_url } = req.body;
   const user = await UserModel.findByIdAndUpdate(
     id,
-    { firstName, lastName, mobile, email, password },
+    { firstName, lastName, mobile, email, password, head_img_url },
     { new: true }
   ).exec();
   if (!user) {
@@ -48,17 +50,13 @@ const deleteUserById = async (req, res) => {
   res.json(user);
 };
 
-const addUserToComment = async (req, res) => {};
+// const addNotificationToUser = async (req, res) => {};
 
-const removeUserFromComment = async (req, res) => {};
+// const removeNotificationFromUser = async (req, res) => {};
 
-const addNotificationToUser = async (req, res) => {};
+// const addTaskToUser = async (req, res) => {};
 
-const removeNotificationFromUser = async (req, res) => {};
-
-const addTaskToUser = async (req, res) => {};
-
-const removeTaskFromUser = async (req, res) => {};
+// const removeTaskFromUser = async (req, res) => {};
 
 module.exports = {
   // addUser,
@@ -66,10 +64,8 @@ module.exports = {
   getUserById,
   updateUserById,
   deleteUserById,
-  addUserToComment,
-  removeUserFromComment,
-  addNotificationToUser,
-  removeNotificationFromUser,
-  addTaskToUser,
-  removeTaskFromUser,
+  // addNotificationToUser,
+  // removeNotificationFromUser,
+  // addTaskToUser,
+  // removeTaskFromUser,
 };

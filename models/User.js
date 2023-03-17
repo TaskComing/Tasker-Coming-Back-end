@@ -55,21 +55,33 @@ const userSchema = new Schema({
   following_task_id: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'task',
+      ref: 'Task',
     },
   ],
   notification_id: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'notification',
+      ref: 'Notification',
     },
   ],
   // notification: [
   //   {
   //     type: String,
-  //     ref: 'notification',
+  //     ref: 'Notification',
   //   },
   // ],
+  comments_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
+  offers_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Offer',
+    },
+  ],
   deleted: {
     type: Boolean,
     default: false,

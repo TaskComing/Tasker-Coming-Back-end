@@ -8,6 +8,8 @@ const {
   updateCommentById,
   deleteCommentById,
   addReplyToComment,
+  addCommentToUser,
+  // removeCommentFromUser,
 } = require('../controllers/comments');
 
 const commentRouter = Router();
@@ -19,5 +21,8 @@ commentRouter.put('/:id', auth, updateCommentById);
 commentRouter.delete('/:id', auth, deleteCommentById);
 // commentRouter.post('/:id', addReplyToComment);
 commentRouter.post('/query', auth, addReplyToComment);
+
+commentRouter.post('/:commentId/users/:userId', auth, addCommentToUser);
+// commentRouter.delete('/:commentId/users/:userId', removeCommentFromUser);
 
 module.exports = commentRouter;
