@@ -1,5 +1,4 @@
-const { identity } = require('lodash');
-const CommentModel = require('../models/Comment');
+const CommentModel = require('../models/comment');
 const UserModel = require('../models/User');
 
 const addComment = async (req, res) => {
@@ -41,7 +40,6 @@ const updateCommentById = async (req, res) => {
 
 const deleteCommentById = async (req, res) => {
   const { id } = req.params;
-  console.log(req.params);
   // const user = await UserModel.findById(userId).exec();
   const comment = await CommentModel.findByIdAndDelete(id).exec();
   if (!comment) {
