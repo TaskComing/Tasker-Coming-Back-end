@@ -89,18 +89,17 @@ const userSchema = new Schema({
   // profilePicture: { type: String, required: false },
 });
 
-userSchema.pre('save', async function () {
+userSchema.pre('save', async () => {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-userSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id, name: this.name }, process.env.JWT_SECRET, {
+userSchema.methods.createJWT = () =>
+  jwt.sign({ userId: this._id, name: this.name }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
-};
 
-userSchema.methods.comparePassword = async function (password) {
+userSchema.methods.comparePassword = async (password) => {
   const isMatch = await bcrypt.compare(password, this.password);
   return isMatch;
 };
