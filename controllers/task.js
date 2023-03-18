@@ -5,7 +5,7 @@ const getAllTasks = async (req, res) => {
   const tasks = await taskModel.find().exec();
   res.json(tasks);
 };
-const getTaskById = async (req, res, next) => {
+const getTaskById = async (req, res) => {
   const { id } = req.params;
   const task = await taskModel.findById(id).exec();
   if (!task) {
@@ -16,7 +16,6 @@ const getTaskById = async (req, res, next) => {
 };
 
 const addTask = async (req, res) => {
-  console.log(req);
   const {
     due_time,
     remote,
@@ -52,7 +51,7 @@ const addTask = async (req, res) => {
   res.status(201).json(task);
 };
 
-const updateTaskById = async (req, res, next) => {
+const updateTaskById = async (req, res) => {
   const { id } = req.params;
   const {
     due_time,
@@ -97,7 +96,7 @@ const updateTaskById = async (req, res, next) => {
   res.json(task);
 };
 
-const deleteTaskById = async (req, res, next) => {
+const deleteTaskById = async (req, res) => {
   const { id } = req.params;
   const task = await taskModel.findByIdAndDelete(id).exec();
   if (!task) {
