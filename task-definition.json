@@ -1,0 +1,57 @@
+{
+   
+    "containerDefinitions": [
+        {
+            "name": "backend",
+            "image": "062550047379.dkr.ecr.ap-southeast-2.amazonaws.com/backendecr:69266ce4ea0044e53bbf325af4d7072ab5914258",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "backend-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                },
+                {
+                    "name": "backend-8080-tcp",
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/backend",
+                    "awslogs-region": "ap-southeast-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "family": "backendtaskdef",
+    "executionRoleArn": "arn:aws:iam::062550047379:role/ecsRole",
+    "networkMode": "awsvpc",
+    "volumes": [],
+
+    "placementConstraints": [],
+    "requiresCompatibilities": [
+        "FARGATE"],
+
+    "cpu": "1024",
+    "memory": "3072",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    
+    "tags": []
+}

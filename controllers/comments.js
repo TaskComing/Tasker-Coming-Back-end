@@ -1,4 +1,5 @@
-const CommentModel = require('../models/comment');
+const CommentModel = require('../models/Comment');
+const UserModel = require('../models/User');
 
 const addComment = async (req, res) => {
   const { text, create_datetime } = req.body;
@@ -14,7 +15,7 @@ const getAllComments = async (req, res) => {
 
 const getCommentById = async (req, res) => {
   const { id } = req.params;
-  const comment = await CommentModel.findById(id).exec();
+  const comment = await CommentModel.findById(id).populate('create_user_id').exec();
   if (!comment) {
     res.status(404).json({ error: 'comment not found' });
     return;
@@ -39,11 +40,20 @@ const updateCommentById = async (req, res) => {
 
 const deleteCommentById = async (req, res) => {
   const { id } = req.params;
+  // const user = await UserModel.findById(userId).exec();
   const comment = await CommentModel.findByIdAndDelete(id).exec();
   if (!comment) {
     res.status(404).json({ error: 'comment not found' });
     return;
   }
+  await UserModel.updateMany(
+    { comments_id: id },
+    {
+      $pull: {
+        comments_id: id,
+      },
+    }
+  ).exec();
   res.sendStatus(204);
 };
 
@@ -62,6 +72,42 @@ const addReplyToComment = async (req, res) => {
   res.status(201).json(reply);
 };
 
+const addCommentToUser = async (req, res) => {
+  const { userId, commentId } = req.params;
+  const user = await UserModel.findById(userId).exec();
+  const comment = await CommentModel.findById(commentId).exec();
+  if (!user || !comment) {
+    res.status(404).json({ error: 'user or comment not found' });
+    return;
+  }
+  comment.create_user_id = user._id;
+  await comment.save();
+  const updateUser = await UserModel.findByIdAndUpdate(
+    user._id,
+    { $addToSet: { comments_id: comment._id } },
+    { new: true }
+  );
+  res.json(updateUser);
+};
+
+// const removeCommentFromUser = async (req, res) => {
+//   const { userId, commentId } = req.params;
+//   const user = await UserModel.findById(userId).exec();
+//   const comment = await CommentModel.findById(commentId).exec();
+//   if (!user || !comment) {
+//     res.status(404).json({ error: 'user or comment not found' });
+//     return;
+//   }
+//   comment.create_user_id = '';
+//   await comment.save();
+//   await UserModel.findByIdAndUpdate(userId, {
+//     $pull: {
+//       comments_id: comment._id,
+//     },
+//   }).exec();
+//   res.sendStatus(204);
+// };
+
 module.exports = {
   addComment,
   getAllComments,
@@ -69,4 +115,6 @@ module.exports = {
   updateCommentById,
   deleteCommentById,
   addReplyToComment,
+  addCommentToUser,
+  // removeCommentFromUser,
 };
