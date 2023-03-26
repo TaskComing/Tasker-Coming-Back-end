@@ -1,21 +1,10 @@
 const mongoose = require('mongoose');
+// const { Schema, model } = require('mongoose');
 
 const schema = new mongoose.Schema({
-  _id: {
-    type: String,
-    uppercase: true,
-    // alias: 'code',
-  },
   title: {
     type: String,
     required: true,
-  },
-  state: {
-    type: Number,
-  },
-  deleted: {
-    default: false,
-    type: Boolean,
   },
   due_time: {
     type: Date,
@@ -23,6 +12,9 @@ const schema = new mongoose.Schema({
   },
   remote: {
     type: Boolean,
+  },
+  state: {
+    type: Number,
   },
   x: {
     type: mongoose.Decimal128,
@@ -34,12 +26,15 @@ const schema = new mongoose.Schema({
   },
   detail: {
     type: String,
+    default: '',
   },
   images: {
     type: [String],
+    default: '',
   },
   budget: {
     type: Number,
+    default: 0,
   },
   type: {
     type: String,
@@ -53,19 +48,27 @@ const schema = new mongoose.Schema({
   },
   final_price: {
     type: Number,
+    default: 0,
   },
   create_user_id: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   create_datetime: {
     // 数据库的名字是datetime
     type: Date,
+    default: Date.now,
   },
   comments: {
     type: [String],
+    default: '',
   },
   offers: {
     type: Array,
+  },
+  deleted: {
+    default: false,
+    type: Boolean,
   },
 });
 
