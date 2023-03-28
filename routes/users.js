@@ -5,7 +5,7 @@ const {
   getUserById,
   updateUserById,
   deleteUserById,
-  removeNotificationFromUser,
+  // removeNotificationFromUser,
   // addTaskToUser,
   // removeTaskFromUser,
 } = require('../controllers/users');
@@ -18,8 +18,7 @@ userRouter.get('/:id', getUserById);
 userRouter.put('/:id', updateUserById);
 userRouter.delete('/:id', deleteUserById);
 
-userRouter.delete('/:notificationId/users/:userId', removeNotificationFromUser);
-
+// userRouter.delete('/:notificationId/users/:userId', removeNotificationFromUser);
 // userRouter.post('/:taskId/users/:userId', addTaskToUser);
 // userRouter.delete('/:taskId/users/:userId', removeTaskFromUser);
 
