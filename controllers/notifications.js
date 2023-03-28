@@ -1,8 +1,43 @@
 const Notification = require('../models/Notification');
+const User = require('../models/User');
+
+/**
+ * @openapi
+ * /api/notification:
+ *   get:
+ *     summary: Get user's notification list
+ *     description: Retrieves the notification list for a given user ID.
+ *     responses:
+ *       '200':
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Notification'
+ */
 
 async function getNotificationList(req, res) {
-  const notifications = await Notification.find().exec();
-  return res.json(notifications);
+  const { userId } = req.user;
+  // const userId = '6411040776987b7e139eeeb4';
+  const { notification_id: notifications } = await User.findById(userId)
+    .select('notification_id')
+    .populate({
+      path: 'notification_id',
+      populate: {
+        path: 'userInfo',
+        select: 'head_img_url firstName lastName',
+      },
+    })
+    .exec();
+
+  const formatedNotifications = notifications.map((notification) => ({
+    ...notification._doc,
+    id: notification._doc._id,
+  }));
+
+  return res.json(formatedNotifications);
 }
 
 async function getNotificationById(req, res) {
@@ -16,35 +51,29 @@ async function getNotificationById(req, res) {
   return res.json(notification);
 }
 
-async function addNotification(req, res) {
-  const { id, read, text, click_url, notification_type } = req.body;
 
-  const existingNotification = await Notification.findById(id).exec();
-  if (existingNotification) {
-    return res.sendStatus(409); // The request could not be processed because of conflict in the request,
-  }
-
-  const notification = new Notification({ read, text, click_url, notification_type });
-
-  await notification.save();
-  return res.status(201).json(notification);
-}
 
 async function updateNotificationById(req, res) {
-  const { id } = req.params;
+  // const { id } = req.params;
 
-  const { read, text, click_url, notification_type } = req.body;
-  const notification = await Notification.findByIdAndUpdate(id, {
-    read,
-    text,
-    click_url,
-    notification_type,
-  }).exec();
+  const { id, read, text, click_url, type, userInfo } = req.body;
+
+  const notification = await Notification.findByIdAndUpdate(
+    id,
+    {
+      read,
+      text,
+      click_url,
+      type,
+      userInfo,
+    },
+    { new: true }
+  ).exec();
 
   if (!notification) {
     return res.sendStatus(404);
   }
-  return res.json(notification);
+  return res.json(notification); // outdated notification
 }
 
 async function deleteNotificationById(req, res) {
@@ -62,7 +91,6 @@ async function deleteNotificationById(req, res) {
 module.exports = {
   getNotificationList,
   getNotificationById,
-  addNotification,
   updateNotificationById,
   deleteNotificationById,
 };

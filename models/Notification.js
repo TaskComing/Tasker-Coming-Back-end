@@ -1,5 +1,37 @@
 const mongoose = require('mongoose');
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Notification:
+ *       type: object
+ *       properties:
+ *         read:
+ *           type: boolean
+ *           default: false
+ *         text:
+ *           type: string
+ *           required: true
+ *         click_url:
+ *           type: string
+ *           required: true
+ *         type:
+ *           type: string
+ *           required: true
+ *           enum: [comment, offer, task]
+ *         userInfo:
+ *           type: string
+ *           required: true
+ *           description: The object ID of the user associated with this notification
+ *           format: uuid
+ *       required:
+ *         - text
+ *         - click_url
+ *         - type
+ *         - userInfo
+ */
+
 const notificationSchema = new mongoose.Schema(
   {
     read: {
@@ -14,31 +46,27 @@ const notificationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // templateId: {
-    //   //type: mongoose.Schema.Types.String,
-    //   type: String,
-    //   default: 'welcome',
-    //   ref: 'NotificationTemplate'
-    // },
-    notification_type: {
-      type: {
-        type: String,
-        required: true,
+    type: {
+      type: String,
+      required: true,
+      lowercase: true,
+      validate: {
+        validator(v) {
+          return ['comment', 'offer', 'task'].includes(v);
+        },
+        message: (props) => `${props.value} is not a valid notification type`,
       },
-      value: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-      },
+    },
+    userInfo: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
     },
   },
   {
-    virtuals: {
-      id: {
-        get() {
-          return this._id;
-        },
-      },
-    },
+    timestamps: true,
+    id: true,
+    versionKey: false,
   }
 );
 

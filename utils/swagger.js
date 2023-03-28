@@ -13,5 +13,5 @@ module.exports = swaggerJsDoc({
       description: 'This is the API documentation',
     },
   },
-  apis: ['controllers/*.js'],
+  apis: ['controllers/*.js', 'models/*.js'],
 });
