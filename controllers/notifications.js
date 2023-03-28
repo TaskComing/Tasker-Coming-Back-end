@@ -51,12 +51,8 @@ async function getNotificationById(req, res) {
   return res.json(notification);
 }
 
-
-
-async function updateNotificationById(req, res) {
+async function updateNotificationAsReadById(req, res) {
   const { id } = req.params;
-
-  const { read, text, click_url, type, userInfo } = req.body;
 
   const existingNotification = await Notification.findById(id).exec();
   if (!existingNotification) {
@@ -66,11 +62,7 @@ async function updateNotificationById(req, res) {
   const notification = await Notification.findByIdAndUpdate(
     id,
     {
-      read,
-      text,
-      click_url,
-      type,
-      userInfo,
+      read: true,
     },
     { new: true }
   ).exec();
@@ -96,6 +88,6 @@ async function deleteNotificationById(req, res) {
 module.exports = {
   getNotificationList,
   getNotificationById,
-  updateNotificationById,
+  updateNotificationAsReadById,
   deleteNotificationById,
 };
