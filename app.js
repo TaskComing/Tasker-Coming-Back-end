@@ -21,7 +21,7 @@ const v1Router = require('./routes');
 
 const app = express();
 
-app.use(express.json());
+// app.use(express.json());
 // extra security package
 app.use(morgan('dev'));
 app.use(helmet());
