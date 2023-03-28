@@ -54,9 +54,14 @@ async function getNotificationById(req, res) {
 
 
 async function updateNotificationById(req, res) {
-  // const { id } = req.params;
+  const { id } = req.params;
 
-  const { id, read, text, click_url, type, userInfo } = req.body;
+  const { read, text, click_url, type, userInfo } = req.body;
+
+  const existingNotification = await Notification.findById(id).exec();
+  if (!existingNotification) {
+    return res.status(404).json({ error: 'notification not found' });
+  }
 
   const notification = await Notification.findByIdAndUpdate(
     id,

@@ -11,7 +11,7 @@ const notificationRouter = Router();
 
 notificationRouter.get('', getNotificationList);
 notificationRouter.get('/:id', getNotificationById);
-notificationRouter.put('/', updateNotificationById);
+notificationRouter.put('/:id', updateNotificationById);
 notificationRouter.delete('/:id', deleteNotificationById);
 
 module.exports = notificationRouter;
