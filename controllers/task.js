@@ -17,8 +17,11 @@ const getTaskById = async (req, res) => {
 
 const addTask = async (req, res) => {
   const {
+    _id,
+    title,
     due_time,
     remote,
+    address,
     x,
     y,
     detail,
@@ -33,8 +36,11 @@ const addTask = async (req, res) => {
   } = req.body;
 
   const task = new taskModel({
+    _id,
+    title,
     due_time,
     remote,
+    address,
     x,
     y,
     detail,
@@ -58,6 +64,7 @@ const updateTaskById = async (req, res) => {
     remote,
     x,
     y,
+    address,
     detail,
     images,
     budget,
@@ -74,6 +81,7 @@ const updateTaskById = async (req, res) => {
       {
         due_time,
         remote,
+        address,
         x,
         y,
         detail,

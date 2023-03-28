@@ -4,11 +4,11 @@ const schema = new mongoose.Schema({
   _id: {
     type: String,
     uppercase: true,
-    // alias: 'code',
+    alias: 'code',
   },
   title: {
     type: String,
-    // required: true,
+    required: true,
   },
   state: {
     type: Number,
@@ -24,6 +24,9 @@ const schema = new mongoose.Schema({
   remote: {
     type: Boolean,
   },
+  address: {
+    type: String,
+  },
   x: {
     type: mongoose.Decimal128,
     default: 0,
@@ -36,7 +39,7 @@ const schema = new mongoose.Schema({
     type: String,
   },
   images: {
-    type: [String],
+    type: [],
   },
   budget: {
     type: Number,

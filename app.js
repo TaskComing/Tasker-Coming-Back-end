@@ -8,9 +8,10 @@ const xss = require('xss-clean');
 const express = require('express');
 const morgan = require('morgan');
 const passport = require('passport');
-const keys = require('./utils/keys');
 const cookieSession = require('cookie-session');
 const swaggerUi = require('swagger-ui-express');
+const bodyParser = require('body-parser');
+const keys = require('./utils/keys');
 const { connectDB } = require('./db/connect');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -49,6 +50,8 @@ app.use(
 // error handler
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
+app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
 
 const port = process.env.PORT || 5000;
 
