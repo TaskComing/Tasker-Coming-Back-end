@@ -3,17 +3,15 @@ const { Router } = require('express');
 const {
   getNotificationList,
   getNotificationById,
-  addNotification,
-  updateNotificationById,
+  updateNotificationAsReadById,
   deleteNotificationById,
 } = require('../controllers/notifications');
 
 const notificationRouter = Router();
 
 notificationRouter.get('', getNotificationList);
-notificationRouter.post('', addNotification);
 notificationRouter.get('/:id', getNotificationById);
-notificationRouter.put('/:id', updateNotificationById);
+notificationRouter.put('/:id', updateNotificationAsReadById);
 notificationRouter.delete('/:id', deleteNotificationById);
 
 module.exports = notificationRouter;

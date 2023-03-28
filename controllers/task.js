@@ -1,6 +1,7 @@
 // code start
 const taskModel = require('../models/Task');
 const userModel = require('../models/User');
+const notificationService = require('../services/notificationService');
 
 const getAllTasks = async (req, res) => {
   const tasks = await taskModel.find().exec();
@@ -15,6 +16,30 @@ const getTaskById = async (req, res) => {
   }
   res.json(task);
 };
+
+/**
+ * @openapi
+ *
+ * /addTask:
+ *   post:
+ *     summary: Add a new task
+ *     description: Add a new task to the database
+ *     tags:
+ *      - task
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Task'
+ *     responses:
+ *       201:
+ *         description: The task was added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Task'
+ */
 
 const addTask = async (req, res) => {
   const {
@@ -59,6 +84,10 @@ const addTask = async (req, res) => {
     deleted,
   });
   await task.save();
+
+  // add notification
+  await notificationService.createNotification({ task, action: 'createTask' });
+
   res.status(201).json(task);
 };
 
@@ -114,6 +143,10 @@ const updateTaskById = async (req, res) => {
     res.status(404).json({ error: 'task not found ' });
     return;
   }
+
+  // add notification
+  await notificationService.createNotification({ task, action: 'updateTask' });
+
   res.json(task);
 };
 
@@ -124,6 +157,10 @@ const deleteTaskById = async (req, res) => {
     res.status(404).json({ error: 'task not found ' });
     return;
   }
+
+  // add notification
+  await notificationService.createNotification({ task, action: 'deleteTask' });
+
   res.sendStatus(204); // 不需要加内容，它也不返回内容
 };
 

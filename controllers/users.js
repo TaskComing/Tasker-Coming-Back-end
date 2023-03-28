@@ -50,13 +50,18 @@ const deleteUserById = async (req, res) => {
   res.json(user);
 };
 
-// const addNotificationToUser = async (req, res) => {};
-
-// const removeNotificationFromUser = async (req, res) => {};
-
-// const addTaskToUser = async (req, res) => {};
-
-// const removeTaskFromUser = async (req, res) => {};
+// @@
+// const removeNotificationFromUser = async (req, res) => {
+//   const { notificationId, userId } = req.params;
+//   const user = await UserModel.findByIdAndUpdate(
+//     userId,
+//     { $pull: { notification_id: notificationId } },
+//     { new: true }
+//   ).exec();
+//   if (!user) {
+//     res.status(404).json({ error: 'user not found' });
+//   }
+// };
 
 module.exports = {
   // addUser,
@@ -64,7 +69,6 @@ module.exports = {
   getUserById,
   updateUserById,
   deleteUserById,
-  // addNotificationToUser,
   // removeNotificationFromUser,
   // addTaskToUser,
   // removeTaskFromUser,
