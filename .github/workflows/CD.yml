@@ -54,6 +54,10 @@ jobs:
               JWT_LIFETIME=${{ secrets.JWT_LIFETIME }}
               MONGO_URI=${{ secrets.MONGO_URI }}
               JWT_SECRET=${{ secrets.JWT_SECRET }}
+              COOKIE_KEY=${{ secrets.COOKIE_KEY }}
+              GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+              GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+              
         
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
