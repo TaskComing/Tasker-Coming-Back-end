@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 // const { Schema, model } = require('mongoose');
 
 const schema = new mongoose.Schema({
-  _id: {
-    type: String,
-    uppercase: true,
-    alias: 'code',
-  },
+  // _id: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   default: new mongoose.Types.ObjectId(),
+  //   unique: true,
+  // },
   title: {
     type: String,
     required: true,
@@ -21,14 +22,14 @@ const schema = new mongoose.Schema({
   address: {
     type: String,
   },
-  x: {
-    type: mongoose.Decimal128,
-    default: 0,
-  },
-  y: {
-    type: mongoose.Decimal128,
-    default: 0,
-  },
+  // x: {
+  //   type: mongoose.Decimal128,
+  //   default: 0,
+  // },
+  // y: {
+  //   type: mongoose.Decimal128,
+  //   default: 0,
+  // },
   detail: {
     type: String,
     default: '',
