@@ -88,6 +88,12 @@ const mongoose = require('mongoose');
  *               offer_amount: 75
  */
 const schema = new mongoose.Schema({
+  // _id: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   default: new mongoose.Types.ObjectId(),
+  //   unique: true,
+  // },
   title: {
     type: String,
     required: true,
@@ -99,24 +105,23 @@ const schema = new mongoose.Schema({
   remote: {
     type: Boolean,
   },
-  state: {
-    type: Number,
+  address: {
+    type: String,
   },
-  x: {
-    type: mongoose.Decimal128,
-    default: 0,
-  },
-  y: {
-    type: mongoose.Decimal128,
-    default: 0,
-  },
+  // x: {
+  //   type: mongoose.Decimal128,
+  //   default: 0,
+  // },
+  // y: {
+  //   type: mongoose.Decimal128,
+  //   default: 0,
+  // },
   detail: {
     type: String,
     default: '',
   },
   images: {
-    type: [String],
-    default: '',
+    type: [],
   },
   budget: {
     type: Number,
