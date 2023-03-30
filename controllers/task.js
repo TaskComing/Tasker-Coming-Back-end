@@ -47,6 +47,8 @@ const addTask = async (req, res) => {
     due_time,
     remote,
     state,
+    suburb,
+    street,
     x,
     y,
     detail,
@@ -61,6 +63,7 @@ const addTask = async (req, res) => {
     comments,
     offers,
     deleted,
+    address,
   } = req.body;
 
   const task = new taskModel({
@@ -68,6 +71,8 @@ const addTask = async (req, res) => {
     due_time,
     remote,
     state,
+    suburb,
+    street,
     x,
     y,
     detail,
@@ -82,6 +87,7 @@ const addTask = async (req, res) => {
     comments,
     offers,
     deleted,
+    address,
   });
   await task.save();
 

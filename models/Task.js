@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 /**
  * @openapi
- * 
+ *
  * components:
  *   schemas:
  *     Task:
@@ -100,7 +100,14 @@ const schema = new mongoose.Schema({
     type: Boolean,
   },
   state: {
-    type: Number,
+    type: String,
+    required: true,
+  },
+  suburb: {
+    type: String,
+  },
+  street: {
+    type: String,
   },
   x: {
     type: mongoose.Decimal128,
@@ -131,6 +138,12 @@ const schema = new mongoose.Schema({
   status: {
     type: String,
     default: 'open',
+    validate: {
+      validator(v) {
+        return ['open', 'assigned', 'completed'].includes(v);
+      },
+      message: (props) => `${props.value} is not a valid status type`,
+    },
   },
   final_price: {
     type: Number,
@@ -156,6 +169,17 @@ const schema = new mongoose.Schema({
     default: false,
     type: Boolean,
   },
+});
+
+schema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
+schema.virtual('address').get(function () {
+  return `${this.street}, ${this.suburb}, ${this.state}`;
+});
+
+schema.set('toJSON', {
+  virtuals: true,
 });
 
 const TaskModel = mongoose.model('Task', schema);
