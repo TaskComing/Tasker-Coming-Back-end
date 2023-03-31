@@ -44,7 +44,7 @@ async function createNotification({ task, action, offer }) {
   let assigneeNotifications = [];
 
   const click_url = `/task-details/${task._id}`;
-
+  
   switch (action) {
     case 'createTask':
       taskerNotification = {

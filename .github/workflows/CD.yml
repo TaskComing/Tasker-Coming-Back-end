@@ -24,7 +24,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          role-to-assume: arn:aws:iam::062550047379:role/github-actions-OIDC
+          role-to-assume: ${{ secrets.OIDC }}
           aws-region: ap-southeast-2
           
       - name: Login to Amazon ECR
@@ -54,6 +54,10 @@ jobs:
               JWT_LIFETIME=${{ secrets.JWT_LIFETIME }}
               MONGO_URI=${{ secrets.MONGO_URI }}
               JWT_SECRET=${{ secrets.JWT_SECRET }}
+              COOKIE_KEY=${{ secrets.COOKIE_KEY }}
+              GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+              GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+              
         
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
