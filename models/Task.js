@@ -122,6 +122,7 @@ const schema = new mongoose.Schema({
   y: {
     type: mongoose.Decimal128,
     default: 0,
+  },
   address: {
     type: String,
   },
