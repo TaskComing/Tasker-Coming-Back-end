@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 /**
  * @openapi
- * 
+ *
  * components:
  *   schemas:
  *     Task:

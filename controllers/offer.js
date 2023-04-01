@@ -2,7 +2,8 @@ const OfferModel = require('../models/Offer');
 const notificationService = require('../services/notificationService');
 
 const addOffer = async (req, res) => {
-  const { name, number, email, description, deleted, task, create_datetime, create_user_id } = req.body;
+  const { name, number, email, description, deleted, task, create_datetime, create_user_id } =
+    req.body;
 
   const offer = new OfferModel({
     name,
@@ -14,11 +15,15 @@ const addOffer = async (req, res) => {
     create_datetime,
     create_user_id,
   });
-  
+
   await offer.save();
   // add notification to the database
   const taskPopulated = await OfferModel.findById(offer._id).populate('task').exec();
-  await notificationService.createNotification({ task: taskPopulated, action: 'createOffer', offer });
+  await notificationService.createNotification({
+    task: taskPopulated,
+    action: 'createOffer',
+    offer,
+  });
 
   res.status(201).json(offer);
 };

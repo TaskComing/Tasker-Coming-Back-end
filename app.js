@@ -16,7 +16,6 @@ const { connectDB } = require('./db/connect');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const swaggerJsDoc = require('./utils/swagger');
-require('./controllers/passportGoogle');
 const v1Router = require('./routes');
 
 const app = express();
