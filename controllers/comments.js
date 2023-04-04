@@ -3,15 +3,15 @@ const CommentModel = require('../models/Comment');
 const UserModel = require('../models/User');
 
 const addComment = async (req, res) => {
-  const { text, create_datetime } = req.body;
-  const comment = new CommentModel({ text, create_datetime });
+  const { text, create_datetime, create_user_id } = req.body;
+  const comment = new CommentModel({ text, create_datetime, create_user_id });
   await comment.save();
   res.status(201).json(comment);
 };
 
 const getAllComments = async (req, res) => {
-  const comments = await CommentModel.find().exec();
-  res.json(comments);
+  const comments = await CommentModel.find().populate('create_user_id').exec();
+  res.status(200).json(comments);
 };
 
 const getCommentById = async (req, res) => {

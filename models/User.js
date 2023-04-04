@@ -27,21 +27,19 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please provide password'],
-    minLength: 6,
-    maxLength: 25,
+    required: [true, 'Please provide password of at least six digits'],
+    minlength: 6,
+    maxlength: 25,
   },
-  // confirmPassword: {
-  //   type: String,
-  //   required: [true, 'Please confirm your password!'],
-  //   // this runs only save() or create()
-  //   validate: {
-  //     validator(el) {
-  //       return el === this.password;
-  //     },
-  //     message: "Passwords don't match",
-  //   },
-  // },
+  googleId: {
+    type: String,
+    allowNull: true,
+  },
+  picture: {
+    type: String,
+    allowNull: true,
+  },
+
   mobile: {
     type: String,
     length: 11,
