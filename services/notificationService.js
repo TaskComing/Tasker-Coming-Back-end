@@ -43,11 +43,13 @@ async function createNotification({ task, action, offer }) {
   let taskerNotification = {};
   let assigneeNotifications = [];
 
+  const click_url = `/task-details/${task._id}`;
+  
   switch (action) {
     case 'createTask':
       taskerNotification = {
         text: `Your task ${task.title} has been created successfully`,
-        click_url: '/task-details/',
+        click_url,
         type: 'task',
         userInfo: task.create_user_id,
       };
@@ -55,13 +57,13 @@ async function createNotification({ task, action, offer }) {
     case 'updateTask':
       taskerNotification = {
         text: `Your task ${task.title} has been updated successfully`,
-        click_url: '/task-details/',
+        click_url,
         type: 'task',
         userInfo: task.create_user_id,
       };
       assigneeNotifications = task.offers.map((userId) => ({
-        text: `The Task ${task.title} you have offered to is updated`,
-        click_url: '/task-details/',
+        text: `The task ${task.title} you have offered to is updated`,
+        click_url,
         type: 'task',
         userInfo: userId,
       }));
@@ -69,13 +71,13 @@ async function createNotification({ task, action, offer }) {
     case 'deleteTask':
       taskerNotification = {
         text: `Your task ${task.title} has been deleted successfully`,
-        click_url: '/task-details/',
+        click_url,
         type: 'task',
         userInfo: task.create_user_id,
       };
       assigneeNotifications = task.offers.map((userId) => ({
-        text: `The Task ${task.title} you have offered to is cancelled`,
-        click_url: '/task-details/',
+        text: `The task ${task.title} you have offered to is cancelled`,
+        click_url,
         type: 'task',
         userInfo: userId,
       }));
@@ -83,13 +85,13 @@ async function createNotification({ task, action, offer }) {
     case 'receiveOffer':
       taskerNotification = {
         text: `Your task ${task.title} has been deleted successfully`,
-        click_url: '/task-details/',
+        click_url,
         type: 'task',
         userInfo: task.create_user_id,
       };
       assigneeNotifications = {
         text: `Your offer to task ${task.title} has been submitted successfully`,
-        click_url: '/task-details/',
+        click_url,
         type: 'offer',
         userInfo: offer.create_user_id,
       };
