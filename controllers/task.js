@@ -13,7 +13,7 @@ const getTaskById = async (req, res) => {
     .findById(id)
     .populate({
       path: 'create_user_id',
-      select: 'following_task_id head_img_url',
+      select: 'following_task_id head_img_url firstName lastName',
     })
     .exec();
   if (!task) {
