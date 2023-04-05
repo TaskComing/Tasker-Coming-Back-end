@@ -39,6 +39,36 @@ const updateUserById = async (req, res) => {
   res.json(user);
 };
 
+const updateFollowById = async (req, res) => {
+  const { id } = req.params;
+  const { following_task_id } = req.body;
+
+  const user = await UserModel.findById(id).exec();
+  if (!user) {
+    res.status(404).json({ error: 'user not found' });
+    return;
+  }
+
+  const followingTasks = user.following_task_id;
+  const dataExistsIndex = followingTasks.indexOf(following_task_id);
+  if (dataExistsIndex !== -1) {
+    followingTasks.splice(dataExistsIndex, 1);
+  } else {
+    followingTasks.push(following_task_id);
+  }
+
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    id,
+    { following_task_id: followingTasks },
+    { new: true }
+  ).exec();
+  if (!updatedUser) {
+    res.status(404).json({ error: 'update failed' });
+    return;
+  }
+  res.json({ msg: 'follow array update success'});
+};
+
 const deleteUserById = async (req, res) => {
   const { id } = req.params;
   const deleted = true;
@@ -68,6 +98,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   updateUserById,
+  updateFollowById,
   deleteUserById,
   // removeNotificationFromUser,
   // addTaskToUser,

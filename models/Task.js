@@ -107,7 +107,7 @@ const schema = new mongoose.Schema({
   },
   state: {
     type: String,
-    required: true,
+    // required: true,
   },
   suburb: {
     type: String,
