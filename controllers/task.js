@@ -9,7 +9,13 @@ const getAllTasks = async (req, res) => {
 };
 const getTaskById = async (req, res) => {
   const { id } = req.params;
-  const task = await taskModel.findById(id).populate('create_user_id').exec();
+  const task = await taskModel
+    .findById(id)
+    .populate({
+      path: 'create_user_id',
+      select: 'following_task_id head_img_url firstName lastName',
+    })
+    .exec();
   if (!task) {
     res.status(404).json({ error: 'task not found ' });
     return;
@@ -127,6 +133,7 @@ const updateTaskById = async (req, res) => {
         title,
         due_time,
         remote,
+        state,
         address,
         detail,
         images,
