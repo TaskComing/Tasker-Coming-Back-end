@@ -9,7 +9,13 @@ const getAllTasks = async (req, res) => {
 };
 const getTaskById = async (req, res) => {
   const { id } = req.params;
-  const task = await taskModel.findById(id).populate('create_user_id').exec();
+  const task = await taskModel
+    .findById(id)
+    .populate({
+      path: 'create_user_id',
+      select: 'following_task_id head_img_url firstName lastName',
+    })
+    .exec();
   if (!task) {
     res.status(404).json({ error: 'task not found ' });
     return;
@@ -43,12 +49,16 @@ const getTaskById = async (req, res) => {
 
 const addTask = async (req, res) => {
   const {
+    // _id,
     title,
     due_time,
     remote,
     state,
+    suburb,
+    street,
     x,
     y,
+    address,
     detail,
     images,
     budget,
@@ -64,12 +74,16 @@ const addTask = async (req, res) => {
   } = req.body;
 
   const task = new taskModel({
+    // _id,
     title,
     due_time,
     remote,
     state,
+    suburb,
+    street,
     x,
     y,
+    address,
     detail,
     images,
     budget,
@@ -98,8 +112,7 @@ const updateTaskById = async (req, res) => {
     due_time,
     remote,
     state,
-    x,
-    y,
+    address,
     detail,
     images,
     budget,
@@ -121,8 +134,7 @@ const updateTaskById = async (req, res) => {
         due_time,
         remote,
         state,
-        x,
-        y,
+        address,
         detail,
         images,
         budget,
