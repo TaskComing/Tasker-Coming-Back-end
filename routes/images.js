@@ -6,6 +6,6 @@ const upload = multer({ dest: 'uploads/' });
 
 const imageRouter = Router();
 
-imageRouter.post('', upload.single('image'), uploadFileToS3);
+imageRouter.post('', upload.array('image'), uploadFileToS3);
 
 module.exports = imageRouter;
