@@ -1,11 +1,6 @@
 const { Schema, model } = require('mongoose');
 
 const offerSchema = new Schema({
-  _id: {
-    type: String,
-    uppercase: true,
-    // alias: 'code',
-  },
   name: {
     type: String,
     required: true,
@@ -25,10 +20,6 @@ const offerSchema = new Schema({
   task: {
     type: Schema.Types.ObjectId,
     ref: 'Task',
-  },
-  deleted: {
-    default: false,
-    type: Boolean,
   },
   create_user_id: {
     type: Schema.Types.ObjectId,
