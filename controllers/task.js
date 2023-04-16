@@ -4,7 +4,13 @@ const userModel = require('../models/User');
 const notificationService = require('../services/notificationService');
 
 const getAllTasks = async (req, res) => {
-  const tasks = await taskModel.find().exec();
+  const tasks = await taskModel
+    .find()
+    .populate({
+      path: 'create_user_id',
+      select: 'head_img_url',
+    })
+    .exec();
   res.json(tasks);
 };
 const getTaskById = async (req, res) => {
