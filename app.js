@@ -3,7 +3,7 @@ require('express-async-errors');
 require('./controllers/passport');
 require('./controllers/passportGoogle');
 const helmet = require('helmet');
-const cors = require('cors');
+// const cors = require('cors');
 const xss = require('xss-clean');
 const express = require('express');
 const morgan = require('morgan');
@@ -21,12 +21,23 @@ const v1Router = require('./routes');
 
 const app = express();
 
-// app.use(express.json());
+app.use(express.json());
 // extra security package
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(xss());
-app.use(cors({ origin: 'https://taskercoming.com', credentials: true }));
+// app.use(cors());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Authorization,X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method'
+  );
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, PUT, DELETE');
+  res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE');
+  next();
+});
+
 // routes
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
