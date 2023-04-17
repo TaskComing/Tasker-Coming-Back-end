@@ -107,7 +107,7 @@ const schema = new mongoose.Schema({
   },
   state: {
     type: String,
-    required: true,
+    // required: true,
   },
   suburb: {
     type: String,
@@ -188,7 +188,9 @@ const schema = new mongoose.Schema({
 });
 
 schema.virtual('id').get(function () {
-  return this._id.toHexString();
+  if (this._id) {
+    return this._id.toHexString();
+  }
 });
 schema.virtual('mergedAddress').get(function () {
   return `${this.street}, ${this.suburb}, ${this.state}`;
