@@ -82,6 +82,16 @@ const userSchema = new Schema({
   // profilePicture: { type: String, required: false },
 });
 
+userSchema.virtual('id').get(function () {
+  if (this._id) {
+    return this._id.toHexString();
+  }
+});
+
+userSchema.set('toJSON', {
+  virtuals: true,
+});
+
 userSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

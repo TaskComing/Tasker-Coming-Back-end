@@ -4,13 +4,24 @@ const userModel = require('../models/User');
 const notificationService = require('../services/notificationService');
 
 const getAllTasks = async (req, res) => {
-  const tasks = await taskModel.find().exec();
+  const tasks = await taskModel
+    .find()
+    .populate({
+      path: 'create_user_id',
+      select: 'head_img_url',
+    })
+    .exec();
   res.json(tasks);
 };
 const getTaskById = async (req, res) => {
   const { id } = req.params;
-  const task = await taskModel.findById(id).populate('create_user_id').exec();
-
+  const task = await taskModel
+    .findById(id)
+    .populate({
+      path: 'create_user_id',
+      select: 'following_task_id head_img_url firstName lastName',
+    })
+    .exec();
   if (!task) {
     res.status(404).json({ error: 'task not found ' });
     return;
@@ -128,6 +139,7 @@ const updateTaskById = async (req, res) => {
         title,
         due_time,
         remote,
+        state,
         address,
         detail,
         images,

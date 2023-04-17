@@ -5,6 +5,7 @@ const {
   getUserById,
   updateUserById,
   deleteUserById,
+  updateFollowById,
   // removeNotificationFromUser,
   // addTaskToUser,
   // removeTaskFromUser,
@@ -16,6 +17,7 @@ const userRouter = Router();
 userRouter.get('', getAllUsers);
 userRouter.get('/:id', getUserById);
 userRouter.put('/:id', updateUserById);
+userRouter.put('/follow/:id', updateFollowById);
 userRouter.delete('/:id', deleteUserById);
 
 // userRouter.delete('/:notificationId/users/:userId', removeNotificationFromUser);
