@@ -26,7 +26,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(xss());
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: 'https://taskercoming.com', credentials: true }));
 // routes
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
