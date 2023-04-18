@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(xss());
-// app.use(cors());
+app.use(cors());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
