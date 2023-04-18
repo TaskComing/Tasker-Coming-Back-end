@@ -8,8 +8,8 @@ const { BadRequestError, UnauthenticatedError } = require('../errors');
 const registerUser = asyncHandler(async (req, res) => {
   try {
     // email register
-    const { firstName, lastName, email, password, confirmPassword } = req.body;
-    const user = new User({ firstName, lastName, email, password, confirmPassword });
+    const { firstName, lastName, email, password } = req.body;
+    const user = new User({ firstName, lastName, email, password });
     await user.save();
     const token = user.createJWT();
     res.status(201).json({

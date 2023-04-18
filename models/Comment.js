@@ -25,6 +25,10 @@ const commentSchema = new Schema({
     required: true,
     default: new Date().getTime(),
   },
+  task_id: {
+    type: Schema.Types.ObjectId,
+    default: '',
+  },
 });
 
 const CommentModel = model('Comment', commentSchema);

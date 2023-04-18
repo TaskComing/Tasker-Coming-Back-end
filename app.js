@@ -3,7 +3,6 @@ require('express-async-errors');
 require('./controllers/passport');
 require('./controllers/passportGoogle');
 const helmet = require('helmet');
-const cors = require('cors');
 const xss = require('xss-clean');
 const express = require('express');
 const morgan = require('morgan');
@@ -16,7 +15,6 @@ const { connectDB } = require('./db/connect');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const swaggerJsDoc = require('./utils/swagger');
-require('./controllers/passportGoogle');
 const v1Router = require('./routes');
 
 const app = express();
@@ -26,7 +24,11 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(xss());
-app.use(cors());
+
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+
+//cros
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
@@ -36,8 +38,6 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use(bodyParser.json({ limit: '5mb' }));
-app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 app.use('/v1', v1Router);
 
 // health check api
@@ -61,7 +61,7 @@ app.use(
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 const start = async () => {
   try {
