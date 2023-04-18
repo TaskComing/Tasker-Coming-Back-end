@@ -10,6 +10,7 @@ const passport = require('passport');
 const cookieSession = require('cookie-session');
 const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const keys = require('./utils/keys');
 const { connectDB } = require('./db/connect');
 const notFoundMiddleware = require('./middleware/not-found');
@@ -29,6 +30,7 @@ app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
 //cros
+app.use(cors());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
