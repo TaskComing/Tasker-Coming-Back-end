@@ -17,6 +17,7 @@ v1Router.use('/tasks', taskRouter);
 v1Router.use('/notifications', auth, notificationRouter);
 v1Router.use('/comments', commentRouter);
 v1Router.use('/users', auth, userRouter);
+v1Router.use('/offers', auth, offerRouter);
 v1Router.use('/images', imageRouter);
 v1Router.use('/task-details', offerRouter);
 

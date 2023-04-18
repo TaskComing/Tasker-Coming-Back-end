@@ -15,11 +15,19 @@ const getAllTasks = async (req, res) => {
 };
 const getTaskById = async (req, res) => {
   const { id } = req.params;
+  // login user? with offers: remove offers
   const task = await taskModel
     .findById(id)
     .populate({
       path: 'create_user_id',
       select: 'following_task_id head_img_url firstName lastName',
+    })
+    .populate({
+      path: 'offers',
+      populate: {
+        path: 'create_user_id',
+        select: 'head_img_url',
+      },
     })
     .exec();
   if (!task) {

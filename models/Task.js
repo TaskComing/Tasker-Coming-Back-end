@@ -180,6 +180,7 @@ const schema = new mongoose.Schema({
   },
   offers: {
     type: Array,
+    ref: 'Offer',
   },
   deleted: {
     default: false,
