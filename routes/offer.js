@@ -12,7 +12,7 @@ const { acceptOfferService } = require('../services/offerService');
 
 const offerRouter = Router();
 
-offerRouter.post('/:taskId', auth, addOffer);
+offerRouter.post('/', addOffer);
 offerRouter.get('', getAllOffers);
 offerRouter.get('/Ids/', getOfferByIds);
 offerRouter.get('/:id', getOfferById);

@@ -111,6 +111,9 @@ const addTask = async (req, res) => {
     offers,
     deleted,
   });
+  if (task.images.length === 0) {
+    task.images.push('/img/TaskDetailBackground.png');
+  }
   await task.save();
 
   // add notification
