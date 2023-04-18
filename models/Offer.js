@@ -6,7 +6,7 @@ const offerSchema = new Schema({
     required: true,
   },
   number: {
-    type: Number,
+    type: String,
     required: true,
   },
   email: {
@@ -29,6 +29,18 @@ const offerSchema = new Schema({
     type: Date,
     required: true,
     default: new Date().getTime(),
+  },
+  status: {
+    type: String,
+    default: 'pending',
+    required: true,
+    lowercase: true,
+    validate: {
+      validator(v) {
+        return ['accepted', 'rejected', 'pending'].includes(v);
+      },
+      message: (props) => `${props.value} is not a valid notification type`,
+    },
   },
 });
 const OfferModel = model('Offer', offerSchema);

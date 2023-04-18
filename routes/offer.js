@@ -5,14 +5,18 @@ const {
   getOfferById,
   updateOfferById,
   deleteOfferById,
+  getOfferByIds,
 } = require('../controllers/offer');
 const auth = require('../middleware/authentication');
+const { acceptOfferService } = require('../services/offerService');
 
 const offerRouter = Router();
 
 offerRouter.post('/:taskId', auth, addOffer);
 offerRouter.get('', getAllOffers);
+offerRouter.get('/Ids/', getOfferByIds);
 offerRouter.get('/:id', getOfferById);
+offerRouter.put('/accept/:id', acceptOfferService);
 offerRouter.put('/:id', updateOfferById);
 offerRouter.delete('/:id', deleteOfferById);
 

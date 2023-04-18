@@ -20,7 +20,7 @@ const UserModel = require('../models/User');
 const addNotificationToUser = async (notifications) => {
   const bulkOps = notifications.map((notification) => ({
     updateOne: {
-      filter: { _id: notification.userInfo },
+      filter: { _id: notification.targetUser },
       update: { $push: { notification_id: notification._id } },
     },
   }));
@@ -51,7 +51,8 @@ async function createNotification({ task, action, offer }) {
         text: `Your task ${task.title} has been created successfully`,
         click_url,
         type: 'task',
-        userInfo: task.create_user_id,
+        targetUser: task.create_user_id,
+        userInfo: '643d25afde060c7b53f3c983',
       };
       break;
     case 'updateTask':
@@ -59,13 +60,15 @@ async function createNotification({ task, action, offer }) {
         text: `Your task ${task.title} has been updated successfully`,
         click_url,
         type: 'task',
-        userInfo: task.create_user_id,
+        targetUser: task.create_user_id,
+        userInfo: '643d25afde060c7b53f3c983',
       };
       assigneeNotifications = task.offers.map((userId) => ({
         text: `The task ${task.title} you have offered to is updated`,
         click_url,
         type: 'task',
-        userInfo: userId,
+        targetUser: userId,
+        userInfo: '643d25afde060c7b53f3c983',
       }));
       break;
     case 'deleteTask':
@@ -73,28 +76,65 @@ async function createNotification({ task, action, offer }) {
         text: `Your task ${task.title} has been deleted successfully`,
         click_url,
         type: 'task',
-        userInfo: task.create_user_id,
+        targetUser: task.create_user_id,
+        userInfo: '643d25afde060c7b53f3c983',
       };
       assigneeNotifications = task.offers.map((userId) => ({
         text: `The task ${task.title} you have offered to is cancelled`,
         click_url,
         type: 'task',
-        userInfo: userId,
+        targetUser: userId,
+        userInfo: '643d25afde060c7b53f3c983',
       }));
       break;
-    case 'receiveOffer':
+    case 'createOffer':
       taskerNotification = {
-        text: `Your task ${task.title} has been deleted successfully`,
+        text: `Your task ${task.title} has received a new offer`,
         click_url,
         type: 'task',
-        userInfo: task.create_user_id,
+        targetUser: task.create_user_id,
+        userInfo: '643d25afde060c7b53f3c983',
       };
-      assigneeNotifications = {
-        text: `Your offer to task ${task.title} has been submitted successfully`,
+
+      assigneeNotifications = [
+        {
+          text: `Your offer to task ${task.title} has been submitted successfully`,
+          click_url,
+          type: 'offer',
+          targetUser: offer.create_user_id,
+          userInfo: '643d25afde060c7b53f3c983',
+        },
+      ];
+      break;
+    case 'offerAssigned':
+      taskerNotification = {
+        text: `You have accepted the offer for task ${task.title}`,
         click_url,
-        type: 'offer',
-        userInfo: offer.create_user_id,
+        type: 'task',
+        // userInfo: task.create_user_id,
+        userInfo: '643d25afde060c7b53f3c983',
+        targetUser: task.create_user_id,
       };
+
+      assigneeNotifications = task.offers.map((offerItem) =>
+        offerItem.status === 'accepted'
+          ? {
+              text: `Your offer to task ${task.title} has been accepted`,
+              click_url,
+              type: 'offer',
+              // userInfo: offerItem.create_user_id,
+              userInfo: '643d25afde060c7b53f3c983',
+              targetUser: offerItem.create_user_id,
+            }
+          : {
+              text: `Your offer to task ${task.title} has been assigned to another user`,
+              click_url,
+              type: 'offer',
+              // userInfo: offerItem.create_user_id,
+              userInfo: '643d25afde060c7b53f3c983',
+              targetUser: offerItem.create_user_id,
+            }
+      );
       break;
     default:
       break;
