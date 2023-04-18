@@ -3,7 +3,6 @@ require('express-async-errors');
 require('./controllers/passport');
 require('./controllers/passportGoogle');
 const helmet = require('helmet');
-const cors = require('cors');
 const xss = require('xss-clean');
 const express = require('express');
 const morgan = require('morgan');
@@ -20,15 +19,25 @@ const v1Router = require('./routes');
 
 const app = express();
 
-// app.use(express.json());
+app.use(express.json());
 // extra security package
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(xss());
-app.use(cors());
-// routes
+
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+
+//cros
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Methods', '*');
+  res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE');
+  next();
+});
+
+// routes
 app.use('/v1', v1Router);
 
 // health check api
