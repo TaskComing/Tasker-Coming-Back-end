@@ -3,7 +3,7 @@ require('express-async-errors');
 require('./controllers/passport');
 require('./controllers/passportGoogle');
 const helmet = require('helmet');
-// const cors = require('cors');
+const cors = require('cors');
 const xss = require('xss-clean');
 const express = require('express');
 const morgan = require('morgan');
