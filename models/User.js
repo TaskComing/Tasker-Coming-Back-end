@@ -7,14 +7,14 @@ const userSchema = new Schema({
   firstName: {
     type: String,
     required: [true, 'Please provide firstName'],
-    minlength: 1,
-    maxlength: 20,
+    minLength: 1,
+    maxLength: 20,
   },
   lastName: {
     type: String,
     required: [true, 'Please provide lastName'],
-    minlength: 1,
-    maxlength: 20,
+    minLength: 1,
+    maxLength: 20,
   },
   email: {
     type: String,
@@ -62,12 +62,7 @@ const userSchema = new Schema({
       ref: 'Notification',
     },
   ],
-  // notification: [
-  //   {
-  //     type: String,
-  //     ref: 'Notification',
-  //   },
-  // ],
+
   comments_id: [
     {
       type: Schema.Types.ObjectId,

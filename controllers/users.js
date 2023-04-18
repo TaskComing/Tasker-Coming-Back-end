@@ -66,7 +66,7 @@ const updateFollowById = async (req, res) => {
     res.status(404).json({ error: 'update failed' });
     return;
   }
-  res.json({ msg: 'follow array update success'});
+  res.json({ msg: 'follow array update success' });
 };
 
 const deleteUserById = async (req, res) => {

@@ -5,7 +5,7 @@ const {
   getUserById,
   updateUserById,
   deleteUserById,
-  updateFollowById
+  updateFollowById,
   // removeNotificationFromUser,
   // addTaskToUser,
   // removeTaskFromUser,

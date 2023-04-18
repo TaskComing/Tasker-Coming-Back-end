@@ -1,6 +1,6 @@
 require('dotenv').config();
-const fs = require('fs');
 const AWS = require('aws-sdk');
+const fs = require('fs');
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
@@ -13,7 +13,7 @@ const s3 = new AWS.S3({
   secretAccessKey,
 });
 
-//upload a file to s3
+// upload files to s3
 function uploadFile(file) {
   const fileStream = fs.createReadStream(file.path);
 

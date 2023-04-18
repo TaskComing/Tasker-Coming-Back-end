@@ -6,10 +6,11 @@ const {
   updateOfferById,
   deleteOfferById,
 } = require('../controllers/offer');
+const auth = require('../middleware/authentication');
 
 const offerRouter = Router();
 
-offerRouter.post('', addOffer);
+offerRouter.post('/:taskId', auth, addOffer);
 offerRouter.get('', getAllOffers);
 offerRouter.get('/:id', getOfferById);
 offerRouter.put('/:id', updateOfferById);
